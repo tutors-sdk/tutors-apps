@@ -43,6 +43,7 @@ Cypress.Commands.add("clickCard", (lo: any) => {
         break;
       case "archive":
         cy.verifyDownloadOfArchive(lo);
+        cy.wait(250);
         break;
       case "web":
         cy.verifyContentsExists(lo);
@@ -142,6 +143,13 @@ Cypress.Commands.add("toggleInfoWithVerification", (contents: any) => {
   });
 });
 
+Cypress.Commands.add("checkLoginHref", () => {
+  // Find the login button and verify its text
+  cy.get('a.btn.btn-sm').contains('Login').click({ force: true });
+  cy.url().should('include', '/auth'); // Asserts that URL contains '/auth'
+  cy.contains('button', 'Sign in with GitHub').click({ force: true });
+});
+
 Cypress.Commands.add("partialSearchVerification", (searchWord: string) => {
   const pattern = /lab/i; // Regular expression pattern with 'i' flag for case-insensitive matching
   let countOfMatches = 0;
@@ -197,7 +205,7 @@ Cypress.Commands.add("verifyDownloadOfArchive", (lo: any) => {
     doc.addEventListener('click', () => {
       // this adds a listener that reloads your page 
       // after 0.7 seconds from clicking the download button
-      setTimeout(function () { doc.location.reload() }, 700)
+      setTimeout(function () { doc.location.reload() }, 500)
     })
 
     cy.findByText(lo.title.trim(), {timeout:10000}).click({ force: true })
@@ -292,6 +300,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       goBack(): Chainable<any>;
+      checkLoginHref(): Chainable<any>;
       clickBreadCrumb(step: number): Chainable<any>;
       clickCard(lo: any): Chainable<any>;
       clickLabStep(lo: any): Chainable<any>;

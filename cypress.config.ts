@@ -7,7 +7,7 @@ export default defineConfig({
     FAIL_FAST_STRATEGY: "run",
     FAIL_FAST_ENABLED: true
   },
-  projectId: "k9hnmy",
+  projectId: "op4k6f",
   e2e: {
     experimentalMemoryManagement: true,
     async setupNodeEvents(on, config) {
@@ -37,11 +37,16 @@ export default defineConfig({
       return config;
     },
     trashAssetsBeforeRuns: true,
-    //this url is the url for the static html generator
-    //baseUrl: null,
-    specPattern: "cypress/e2e/**/**.cy.ts",
-    viewportHeight: 1080,
-    viewportWidth: 1920,
-    video: true
-  }
+    baseUrl: "http://localhost:3000",
+    specPattern: "cypress/e2e/**/**.cy.ts"
+  },
+  component: {
+    devServer: {
+      framework: "svelte",
+      bundler: "vite"
+    }
+  },
+  viewportHeight: 1080,
+  viewportWidth: 1920,
+  video: true
 });

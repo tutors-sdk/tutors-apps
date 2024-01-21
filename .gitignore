@@ -63,7 +63,6 @@ yarn-error.log*
 .netlify
 
 # From the main project
-node_modules
 /build
 /.svelte-kit
 /package
