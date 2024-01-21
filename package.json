@@ -11,6 +11,15 @@
     "svelte/*",
     "party/*"
   ],
-  "scripts": {},
-  "devDependencies": {}
+  "scripts": {
+    "e2e": "cypress open",
+    "test": "cypress run"
+  },
+  "devDependencies": {
+    "cy-verify-downloads": "^0.2.3",
+    "cypress": "^13.6.3",
+    "cypress-fail-fast": "^7.1.0",
+    "cypress-real-events": "^1.11.0",
+    "typescript": "^5.3.3"
+  }
 }
