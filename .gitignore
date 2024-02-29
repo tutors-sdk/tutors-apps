@@ -61,3 +61,13 @@ yarn-error.log*
 # turbo
 .turbo
 .netlify
+
+# From the main project
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+/cypress/videos
+/cypress/screenshots

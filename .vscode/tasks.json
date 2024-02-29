@@ -40,5 +40,18 @@
         "runOn": "folderOpen"
       }
     },
+    {
+      "type": "typescript",
+      "tsconfig": "cypress/tsconfig.json",
+      "option": "watch",
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "group": "build",
+      "label": "tsc: watch - cypress/tsconfig.json",
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
   ]
 }
