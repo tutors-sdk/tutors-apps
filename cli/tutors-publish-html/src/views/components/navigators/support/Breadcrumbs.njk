@@ -5,9 +5,6 @@
   <div class="{{ navbarsecondarybg }}">
     <ul>
       {% if lo.type == "wall" %}
-        <h1>
-          Hello
-        </h1>
         <li class="ml-2">
           <a href="./index.html">
             <span class="hidden text-xs lg:block lg:pl-2">
@@ -26,7 +23,7 @@
             {% endif %}
             {{ crumbUrlStart(count, lo) }}
             <span class="hidden text-xs lg:block lg:pl-2">
-              {{ lo.title }}
+              {{ lo.title }} 
             </span>
             {{ crumbUrlEnd() }}
           </li>

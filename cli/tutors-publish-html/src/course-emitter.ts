@@ -71,6 +71,6 @@ export function emitCourse(path: string, lo: Course) {
   lo?.los?.forEach((lo) => {
     emitTopic(lo as Topic, path);
   });
-  publishTemplate(path, "index.html", "Course.njk", lo);
+  publishTemplate(path, "home.html", "Course.njk", lo);
   emitWalls(path, lo);
 }
