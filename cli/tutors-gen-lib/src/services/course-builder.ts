@@ -20,7 +20,7 @@ import {
   readVideoIds,
   removeLeadingHashes,
 } from "../utils/lr-utils.ts";
-import { type Archive, type Composite, type Course, isCompositeLo, type Lab, type Lo, preOrder, type Talk } from "@tutors/tutors-model-lib";
+import { type Archive, type Composite, type Course, isCompositeLo, type Lab, type Lo, preOrder, type Talk, Tutorial } from "@tutors/tutors-model-lib";
 import { readWholeFile, readYamlFile } from "../utils/file-utils.ts";
 import type { LearningResource } from "../types/types.ts";
 
@@ -33,6 +33,12 @@ function buildTalk(lo: Lo, lr: LearningResource) {
   if (!talk.pdf) {
     talk.route = lo.video;
   }
+}
+
+function buildTutorial(lo: Lo, lr: LearningResource) {
+  const tutorial = lo as Tutorial;
+  tutorial.pdf = getPdf(lr);
+  tutorial.pdfFile = getPdfFile(lr);
 }
 
 function buildArchive(lo: Lo, lr: LearningResource) {
@@ -98,6 +104,9 @@ function buildSimpleLo(lo: Lo, lr: LearningResource): Lo {
       break;
     case "talk":
       buildTalk(lo, lr);
+      break;
+    case "tutorial":
+      buildTutorial(lo, lr);
       break;
     case "paneltalk":
       buildTalk(lo, lr);

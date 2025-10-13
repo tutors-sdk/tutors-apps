@@ -14,6 +14,7 @@ export const icons = {
   'unit': 'fluent:dual-screen-group-24-filled',
   'side': 'fluent:dual-screen-group-24-filled',
   'note': 'fluent:notepad-16-regular',
+  'tutorial': 'fluent:arrow-clockwise-dashes-settings-24-regular',
   'panelnote': 'fluent:notepad-16-regular',
   'moodle': 'fluent:hat-graduation-24-filled',
   'slack': 'fluent:chat-24-filled',
@@ -38,6 +39,7 @@ export const colours = {
   'web': '#ba5150',
   'unit': '#557927',
   'note': '#d27711',
+  'tutorial': '#ba5150',
   'panelnote': '#d27711',
 } as const;
 
@@ -56,6 +58,7 @@ export const backgroundColours = {
   'unit': '#557927',
   'side': '#557927',
   'note': '#d27711',
+  'tutorial': '#ba5150',
   'panelnote': '#d27711',
 } as const;
 
@@ -70,29 +73,30 @@ export function getIconType(type: IconType): string {
 }
 
 export const loColours = {
-  "course"     : { border: "#37919b", background: "#37919b" },
-  "topic"      : { border: "#53a878", background: "#d9eee0" },
-  "talk"       : { border: "#cb9d00", background: "#f4ecce" },
-  "paneltalk"  : { border: "#cb9d00", background: "#f4ecce" },
-  "reference"  : { border: "#37919b", background: "#37919b" },
-  "lab"        : { border: "#d00034", background: "#fac5c8" },
-  "archive"    : { border: "#d00034", background: "#fac5c8" },
-  "panelvideo" : { border: "#ff0032", background: "#ff0032" },
-  "video"      : { border: "#ff0032", background: "#ff0032" },
-  "github"     : { border: "#cb9d00", background: "#f4ecce" },
-  "moduleHome" : { border: "#37919b", background: "#37919b" },
-  "web"        : { border: "#008c8f", background: "#d6e9e9" },
-  "unit"       : { border: "#37919b", background: "#37919b" },
-  "side"       : { border: "#37919b", background: "#37919b" },
-  "note"       : { border: "#53a878", background: "#d9eee0" },
-  "panelnote"  : { border: "#37919b", background: "#37919b" },
-  "moodle"     : { border: "#37919b", background: "#37919b" },
-  "slack"      : { border: "#37919b", background: "#37919b" },
-  "youtube"    : { border: "#37919b", background: "#37919b" },
-  "zoom"       : { border: "#37919b", background: "#37919b" },
-  "teams"      : { border: "#37919b", background: "#37919b" },
-  "toc"        : { border: "#37919b", background: "#37919b" },  
-  "info"       : { border: "#37919b", background: "#37919b" },
+  "course": { border: "#37919b", background: "#37919b" },
+  "topic": { border: "#53a878", background: "#d9eee0" },
+  "talk": { border: "#cb9d00", background: "#f4ecce" },
+  "paneltalk": { border: "#cb9d00", background: "#f4ecce" },
+  "reference": { border: "#37919b", background: "#37919b" },
+  "lab": { border: "#d00034", background: "#fac5c8" },
+  "archive": { border: "#d00034", background: "#fac5c8" },
+  "panelvideo": { border: "#ff0032", background: "#ff0032" },
+  "video": { border: "#ff0032", background: "#ff0032" },
+  "github": { border: "#cb9d00", background: "#f4ecce" },
+  "moduleHome": { border: "#37919b", background: "#37919b" },
+  "web": { border: "#008c8f", background: "#d6e9e9" },
+  "unit": { border: "#37919b", background: "#37919b" },
+  "side": { border: "#37919b", background: "#37919b" },
+  "note": { border: "#53a878", background: "#d9eee0" },
+  "tutorial": { border: "#008c8f", background: "#d6e9e9" },
+  "panelnote": { border: "#37919b", background: "#37919b" },
+  "moodle": { border: "#37919b", background: "#37919b" },
+  "slack": { border: "#37919b", background: "#37919b" },
+  "youtube": { border: "#37919b", background: "#37919b" },
+  "zoom": { border: "#37919b", background: "#37919b" },
+  "teams": { border: "#37919b", background: "#37919b" },
+  "toc": { border: "#37919b", background: "#37919b" },
+  "info": { border: "#37919b", background: "#37919b" },
 }
 
 export function loBorderColour(type: IconType): string {
@@ -102,4 +106,3 @@ export function loBorderColour(type: IconType): string {
 export function loBackgroundColour(type: IconType): string {
   return loColours[type].background;
 }
-  

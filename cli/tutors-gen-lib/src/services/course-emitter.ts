@@ -11,6 +11,12 @@ async function emitNote(lo: Lo, path: string) {
   await publishTemplate(notePath, "index.html", "Note", lo);
 }
 
+async function emitTutorial(lo: Lo, path: string) {
+  const tutorialPath = `${path}/${lo.id}`;
+  await publishTemplate(tutorialPath, "index.html", "Tutorial", lo);
+}
+
+
 async function emitLab(lo: Lab, path: string) {
   const labPath = `${path}/${lo.id}`;
   for (let index = 0; index < lo.los.length; index++) {
@@ -18,9 +24,9 @@ async function emitLab(lo: Lab, path: string) {
     const nextStep = index < lo.los.length - 1 ? lo.los[index + 1] : null;
     const prevStep = index > 0 ? lo.los[index - 1] : null;
     if (index === 0) {
-      await publishTemplate(labPath, "index.html", "Lab", {lab:lo, labStep:step, nextStep:nextStep, prevStep:prevStep});
+      await publishTemplate(labPath, "index.html", "Lab", { lab: lo, labStep: step, nextStep: nextStep, prevStep: prevStep });
     } else {
-      await publishTemplate(labPath, `${step.shortTitle}.html`, "Lab", {lab:lo, labStep:step, nextStep:nextStep, prevStep:prevStep});
+      await publishTemplate(labPath, `${step.shortTitle}.html`, "Lab", { lab: lo, labStep: step, nextStep: nextStep, prevStep: prevStep });
     }
   }
 }
@@ -31,6 +37,9 @@ async function emitLoPage(lo: Lo, path: string) {
   }
   if (lo.type == "note" || lo.type == "panelnote") {
     await emitNote(lo as Lo, path);
+  }
+  if (lo.type == "tutorial") {
+    await emitTutorial(lo as Lo, path);
   }
   if (lo.type == "topic") {
     await emitComposite(lo as Topic, `${path}`);
@@ -68,7 +77,7 @@ async function emitComposite(lo: Topic, path: string) {
 export async function emitWalls(path: string, lo: Course) {
   if (lo.walls) {
     for (const los of lo.walls) {
-      await publishTemplate(path, `${los[0].type}.html`, "Wall", {course: lo, los:los});
+      await publishTemplate(path, `${los[0].type}.html`, "Wall", { course: lo, los: los });
     }
   }
 }
