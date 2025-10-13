@@ -1,3 +1,4 @@
+import { Tutorial } from "@tutors/tutors-model-lib";
 import {
   type Archive,
   type Composite,
@@ -59,12 +60,11 @@ export function injectCourseUrl(los: Lo[], id: string, url: string) {
   los.forEach((lo) => {
     if (lo.type === "archive") {
       const archive: Archive = lo as Archive;
-      archive.route = `https://${
-        lo.route?.replace(
-          "/archive/{{COURSEURL}}",
-          url,
-        )
-      }/${archive.archiveFile}`;
+      archive.route = `https://${lo.route?.replace(
+        "/archive/{{COURSEURL}}",
+        url,
+      )
+        }/${archive.archiveFile}`;
     } else {
       lo.route = lo.route?.replace("{{COURSEURL}}", id);
     }
@@ -75,11 +75,16 @@ export function injectCourseUrl(los: Lo[], id: string, url: string) {
       const talk = lo as Talk;
       talk.pdf = talk.pdf?.replace("{{COURSEURL}}", url);
     }
+    if (lo.type === "tutorial") {
+      const tutorial = lo as Tutorial;
+      if (tutorial.pdf) {
+        tutorial.pdf = tutorial.pdf?.replace("{{COURSEURL}}", url);
+      }
+    }
     if (lo.type == "lab") {
       const lab = lo as Lab;
       lab.pdf = lab.pdf?.replace("{{COURSEURL}}", url);
     }
-
     // legacy version of generator included hash based routes;
     // remove these now:
     fixRoutePaths(lo);

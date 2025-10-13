@@ -99,6 +99,16 @@ export type Github = Lo & {
 };
 
 /**
+ * Tutorial learning object
+ * Simple text content
+ */
+export type Tutorial = Lo & {
+  type: "tutorial";
+  pdf: string;
+  pdfFile: string;
+};
+
+/**
  * Note learning object
  * Simple text content
  */
