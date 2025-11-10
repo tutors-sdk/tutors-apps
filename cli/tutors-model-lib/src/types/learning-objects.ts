@@ -3,7 +3,7 @@
  */
 
 import type { Calendar } from "./calendar-types.ts";
-import type { PodcastIdentifier, VideoIdentifiers } from "./media-types.ts";
+import type { PodcastEpisodeIdentifier, VideoIdentifiers } from "./media-types.ts";
 import type { LearningRecord, Properties } from "./type-utils.ts";
 import type { IconNavBar, IconType } from "./icon-types.ts";
 
@@ -122,7 +122,7 @@ export type Note = Lo & {
  */
 export type Podcast = Lo & {
   type: "podcast";
-  episode: PodcastIdentifier;
+  episode: PodcastEpisodeIdentifier;
 };
 
 /**
