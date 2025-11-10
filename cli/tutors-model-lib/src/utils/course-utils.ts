@@ -96,7 +96,7 @@ export function createCompanions(course: Course) {
 export function createWalls(course: Course) {
   course.walls = [];
   course.wallMap = new Map<string, Lo[]>();
-  ["talk", "tutorial", "note", "lab", "web", "archive", "github"].forEach((type) => addWall(course, type as LoType));
+  ["talk", "tutorial", "note", "lab", "podcast", "web", "archive", "github"].forEach((type) => addWall(course, type as LoType));
   course.wallBar = {
     show: true,
     bar: [],
