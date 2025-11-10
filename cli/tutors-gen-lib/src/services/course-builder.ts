@@ -14,7 +14,7 @@ import {
   getMarkdown,
   getPdf,
   getPdfFile,
-  getPodcastLink,
+  getPodcastEpisode,
   getRoute,
   getVideo,
   getWebLink,
@@ -57,7 +57,7 @@ function buildWeb(lo: Lo, lr: LearningResource) {
 
 function buildPodcast(lo: Lo, lr: LearningResource) {
   const podcast = lo as Podcast;
-  podcast.episodeLink = getPodcastLink(lr);
+  podcast.episode = getPodcastEpisode(lr);
 }
 
 function buildGithub(lo: Lo, lr: LearningResource) {

@@ -57,3 +57,8 @@ export type VideoIdentifiers = {
   videoid: string;
   videoIds: VideoIdentifier[];
 };
+
+export type PodcastEpisodeIdentifier = {
+  service: string;
+  id: string;
+};

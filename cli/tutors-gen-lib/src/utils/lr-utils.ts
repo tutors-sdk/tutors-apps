@@ -3,7 +3,7 @@ import frontMatterModule from "front-matter";
 const frontMatter = frontMatterModule.default || frontMatterModule;
 import * as fs from "node:fs";
 import * as yaml from "js-yaml";
-import { imageTypes, type VideoIdentifier, type VideoIdentifiers } from "@tutors/tutors-model-lib";
+import { imageTypes, PodcastEpisodeIdentifier, type VideoIdentifier, type VideoIdentifiers } from "@tutors/tutors-model-lib";
 import { getFileType, getHeaderFromBody, readFirstLineFromFile, readWholeFile, withoutHeaderFromBody } from "./file-utils.ts";
 import process from "node:process";
 import type { LearningResource } from "../types/types.ts";
@@ -85,9 +85,21 @@ export function getWebLink(lr: LearningResource): string {
   return readFirstLineFromFile(webLinkFile);
 }
 
-export function getPodcastLink(lr: LearningResource): string {
-  const webLinkFile = getFileWithName(lr, "episode");
-  return readFirstLineFromFile(webLinkFile);
+export function getPodcastEpisode(lr: LearningResource): PodcastEpisodeIdentifier{
+  const episodeFile = getFileWithName(lr, "episode");
+  const podcastConfig: PodcastEpisodeIdentifier = { service: "spotify", id: "" };
+
+  if (episodeFile) {
+    const entry = readFirstLineFromFile(episodeFile);
+    if (entry !== "" && entry.includes("=")) {
+      const nameValue = entry.split("=");
+      const name = nameValue[0].trim().replace("\r", "");
+      const value = nameValue[1].trim().replace("\r", "");
+      podcastConfig.service = name;
+      podcastConfig.id = value;
+    }
+  }
+  return podcastConfig;
 }
 
 export function getGitLink(lr: LearningResource): string {
