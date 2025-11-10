@@ -14,13 +14,14 @@ import {
   getMarkdown,
   getPdf,
   getPdfFile,
+  getPodcastLink,
   getRoute,
   getVideo,
   getWebLink,
   readVideoIds,
   removeLeadingHashes,
 } from "../utils/lr-utils.ts";
-import { type Archive, type Composite, type Course, isCompositeLo, type Lab, type Lo, preOrder, type Talk, Tutorial } from "@tutors/tutors-model-lib";
+import { type Archive, type Composite, type Course, isCompositeLo, type Lab, type Lo, Podcast, preOrder, type Talk, Tutorial } from "@tutors/tutors-model-lib";
 import { readWholeFile, readYamlFile } from "../utils/file-utils.ts";
 import type { LearningResource } from "../types/types.ts";
 
@@ -52,6 +53,11 @@ function buildPanelvideo(lo: Lo) {
 
 function buildWeb(lo: Lo, lr: LearningResource) {
   lo.route = getWebLink(lr);
+}
+
+function buildPodcast(lo: Lo, lr: LearningResource) {
+  const podcast = lo as Podcast;
+  podcast.episodeLink = getPodcastLink(lr);
 }
 
 function buildGithub(lo: Lo, lr: LearningResource) {
@@ -116,6 +122,9 @@ function buildSimpleLo(lo: Lo, lr: LearningResource): Lo {
       break;
     case "web":
       buildWeb(lo, lr);
+      break;
+    case "podcast":
+      buildPodcast(lo, lr);
       break;
     case "github":
       buildGithub(lo, lr);

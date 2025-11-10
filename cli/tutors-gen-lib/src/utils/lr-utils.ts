@@ -85,6 +85,11 @@ export function getWebLink(lr: LearningResource): string {
   return readFirstLineFromFile(webLinkFile);
 }
 
+export function getPodcastLink(lr: LearningResource): string {
+  const webLinkFile = getFileWithName(lr, "episode");
+  return readFirstLineFromFile(webLinkFile);
+}
+
 export function getGitLink(lr: LearningResource): string {
   const webLinkFile = getFileWithName(lr, "githubid");
   return readFirstLineFromFile(webLinkFile);
