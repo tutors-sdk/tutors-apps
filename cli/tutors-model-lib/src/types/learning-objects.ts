@@ -117,6 +117,15 @@ export type Note = Lo & {
 };
 
 /**
+ * Podcast learning object
+ * Represents a podcast episode
+ */
+export type Podcast = Lo & {
+  type: "podcast";
+  episodeLink: string;
+};
+
+/**
  * Panel-style note learning object
  */
 export type PanelNote = Lo & {
@@ -144,6 +153,7 @@ export type Panels = {
   panelVideos: PanelVideo[];
   panelTalks: PanelTalk[];
   panelNotes: PanelNote[];
+  panelPodcasts: Podcast[];
 };
 
 /**

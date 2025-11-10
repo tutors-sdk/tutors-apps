@@ -11,6 +11,7 @@ import {
   type Panels,
   type PanelTalk,
   type PanelVideo,
+  Podcast,
   type Side,
   type Talk,
   type Unit,
@@ -119,6 +120,7 @@ export function getPanels(los: Lo[]): Panels {
     panelVideos: filterLos<PanelVideo>(los, "panelvideo"),
     panelTalks: filterLos<PanelTalk>(los, "paneltalk"),
     panelNotes: filterLos<PanelNote>(los, "panelnote"),
+    panelPodcasts: filterLos<Podcast>(los, "podcast"),
   };
 }
 
