@@ -131,7 +131,8 @@ export function getUnits(los: Lo[]): Units {
       lo.type !== "panelvideo" &&
       lo.type !== "paneltalk" &&
       lo.type !== "panelnote" &&
-      lo.type !== "side",
+      lo.type !== "side" &&
+      lo.type !== "podcast"
   );
   standardLos = sortLos(standardLos);
   return {
