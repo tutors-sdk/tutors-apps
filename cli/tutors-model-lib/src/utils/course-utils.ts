@@ -148,8 +148,10 @@ export function loadPropertyFlags(course: Course) {
   if (course.calendar) {
     course.hasCalendar = true;
   }
-
   course.hasWhiteList = false;
+  if (course.properties?.hasWhiteList as unknown as number === 1) {
+    course.hasWhiteList = true;
+  }
   course.ignorePin = course.properties?.ignorepin?.toString();
   if (course.properties?.icon && typeof course.properties.icon === "object") {
     const icon = course.properties.icon as { type?: string; color?: string };
