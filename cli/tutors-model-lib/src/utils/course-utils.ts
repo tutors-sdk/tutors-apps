@@ -149,8 +149,8 @@ export function loadPropertyFlags(course: Course) {
     course.hasCalendar = true;
   }
   course.hasWhiteList = false;
-  if (course.properties?.whiteList as unknown as number === 1) {
-    course.hasWhiteList = true;
+  if (course.properties?.whiteList) {
+    course.hasWhiteList = course.properties?.whiteList === "1";
   }
   course.ignorePin = course.properties?.ignorepin?.toString();
   if (course.properties?.icon && typeof course.properties.icon === "object") {
