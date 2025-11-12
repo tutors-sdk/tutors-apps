@@ -150,7 +150,7 @@ export function loadPropertyFlags(course: Course) {
   }
   course.hasWhiteList = false;
   if (course.properties?.whitelist) {
-    course.hasWhiteList = course.properties?.whiteList === "1";
+    course.hasWhiteList = course.properties?.whitelist === "1";
   }
   course.ignorePin = course.properties?.ignorepin?.toString();
   if (course.properties?.icon && typeof course.properties.icon === "object") {
