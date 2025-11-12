@@ -149,7 +149,7 @@ export function loadPropertyFlags(course: Course) {
     course.hasCalendar = true;
   }
   course.hasWhiteList = false;
-  if (course.properties?.whiteList) {
+  if (course.properties?.whitelist) {
     course.hasWhiteList = course.properties?.whiteList === "1";
   }
   course.ignorePin = course.properties?.ignorepin?.toString();
