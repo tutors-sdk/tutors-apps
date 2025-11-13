@@ -38,6 +38,7 @@ function redirectHtmlFile(): string {
       <body>
         <script>
           const host = window.location.host;
+          const subdomain = host.split('.')[0];
           window.location = "https://tutors.dev/course/" + subdomain;
         </script>
       </body>
