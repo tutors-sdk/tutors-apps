@@ -2,7 +2,7 @@
  * Composite learning object types
  */
 
-import type { Calendar } from "./calendar-types.ts";
+import type { Calendar, Enrollment } from "./calendar-types.ts";
 import type { PodcastEpisodeIdentifier, VideoIdentifiers } from "./media-types.ts";
 import type { LearningRecord, Properties } from "./type-utils.ts";
 import type { IconNavBar, IconType } from "./icon-types.ts";
@@ -213,7 +213,7 @@ export type Course = Composite & {
   wallMap?: Map<string, Lo[]>;
   properties: Properties;
   calendar?: Properties;
-  enrollment?: string[];
+  enrollment?: Enrollment;
   courseCalendar?: Calendar;
   authLevel: number;
   isPortfolio: boolean;

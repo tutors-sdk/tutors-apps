@@ -1,5 +1,5 @@
 /**
- * Calendar-related types
+ * Calendar & enrollent related types
  */
 
 /**
@@ -19,4 +19,22 @@ export type Calendar = {
   title: string;
   weeks: WeekType[];
   currentWeek?: WeekType;
+};
+
+/*
+* Enrollment type
+* Represents a list of students and their IDs
+*/
+export type Student = {
+  name:string, 
+  id:string
+}
+
+/*
+* Enrollment type
+* Represents a list of authorised students and their IDs
+*/
+export type Enrollment = {
+  authorisedIds: string;
+  students: Student[];
 };
