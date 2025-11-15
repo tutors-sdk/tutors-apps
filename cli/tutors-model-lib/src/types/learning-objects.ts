@@ -224,7 +224,6 @@ export type Course = Composite & {
   areLabStepsAutoNumbered: boolean;
   hasEnrollment: boolean;
   hasCalendar: boolean;
-  hasWhiteList: boolean;
   defaultPdfReader: string;
   footer: string;
   ignorePin: string;

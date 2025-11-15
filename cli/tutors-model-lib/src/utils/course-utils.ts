@@ -66,6 +66,12 @@ export function createCompanions(course: Course) {
       target: "_blank",
       tip: "Go to module Teams meeting",
     },
+    {
+      key: "podcast",
+      type: "podcast",
+      target: "_blank",
+      tip: "Go to module Podcast",
+    },
   ];
   companionsList.forEach((companionItem) => {
     const { key, type, target, tip } = companionItem;
@@ -147,10 +153,6 @@ export function loadPropertyFlags(course: Course) {
   }
   if (course.calendar) {
     course.hasCalendar = true;
-  }
-  course.hasWhiteList = false;
-  if (course.properties?.whitelist) {
-    course.hasWhiteList = course.properties?.whitelist as unknown as number === 1;
   }
   course.ignorePin = course.properties?.ignorepin?.toString();
   if (course.properties?.icon && typeof course.properties.icon === "object") {
