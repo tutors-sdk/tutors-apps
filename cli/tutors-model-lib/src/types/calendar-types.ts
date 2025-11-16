@@ -35,6 +35,6 @@ export type Student = {
 * Represents a list of authorised students and their IDs
 */
 export type Enrollment = {
-  authorisedIds: string;
+  whitelist: string[];
   students: Student[];
 };
