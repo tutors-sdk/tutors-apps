@@ -97,12 +97,12 @@ export function convertMdToHtml(md: string, codeTheme: string = "ayu-dark"): str
   return markdownIt.render(md);
 }
 
-export function convertLabToHtml(course: Course, lab: Lab) {
+export function convertLabToHtml(course: Course, lab: Lab, protocol: string = "https://") {
   lab.summary = markdownIt.render(lab.summary);
   const url = lab.route.replace(`/lab/${course.courseId}`, course.courseUrl);
   lab.los?.forEach((step) => {
     if (course.courseUrl) {
-      step.contentMd = filter(step.contentMd, url);
+      step.contentMd = filter(step.contentMd, url, protocol);
     }
     step.contentHtml = markdownIt.render(step.contentMd);
     step.parentLo = lab;
@@ -110,17 +110,17 @@ export function convertLabToHtml(course: Course, lab: Lab) {
   });
 }
 
-export function convertNoteToHtml(course: Course, note: Note) {
+export function convertNoteToHtml(course: Course, note: Note, protocol: string = "https://") {
   note.summary = convertMdToHtml(note.summary);
   const url = note.route.replace(`/note/${course.courseId}`, course.courseUrl);
   if (course.courseUrl) {
-    note.contentMd = filter(note.contentMd, url);
+    note.contentMd = filter(note.contentMd, url, protocol);
   }
   note.contentHtml = convertMdToHtml(note.contentMd);
 }
 
 
-export function convertLoToHtml(course: Course, lo: Lo) {
+export function convertLoToHtml(course: Course, lo: Lo, protocol: string = "https://") {
   if (lo.type === "lab") {
     convertLabToHtml(course, lo as Lab);
   }else if (lo.type == "note") {
@@ -131,7 +131,7 @@ export function convertLoToHtml(course: Course, lo: Lo) {
     if (md) {
       if (course.courseUrl) {
         const url = lo.route.replace(`/${lo.type}/${course.courseId}`, course.courseUrl);
-        md = filter(md, url);
+        md = filter(md, url, protocol);
       }
       lo.contentHtml = convertMdToHtml(md);
     }
@@ -156,12 +156,12 @@ function replaceAll(str: string, find: string, replace: string) {
  * @param url - Base URL for converting relative paths
  * @returns Processed markdown content
  */
-export function filter(src: string, url: string): string {
+export function filter(src: string, url: string, protocol: string = "https://"): string {
   let filtered = replaceAll(src, "./img\\/", `img/`);
-  filtered = replaceAll(filtered, "img\\/", `https://${url}/img/`);
+  filtered = replaceAll(filtered, "img\\/", `${protocol}${url}/img/`);
   filtered = replaceAll(filtered, "./archives\\/", `archives/`);
-  filtered = replaceAll(filtered, "(?<!/)archives\\/", `https://${url}/archives/`);
-  filtered = replaceAll(filtered, "(?<!/)archive\\/(?!refs)", `https://${url}/archive/`);
-  filtered = replaceAll(filtered, "\\]\\(\\#", `](https://${url}#/`);
+  filtered = replaceAll(filtered, "(?<!/)archives\\/", `${protocol}${url}/archives/`);
+  filtered = replaceAll(filtered, "(?<!/)archive\\/(?!refs)", `${protocol}${url}/archive/`);
+  filtered = replaceAll(filtered, "\\]\\(\\#", `](${protocol}${url}#/`);
   return filtered;
 }
