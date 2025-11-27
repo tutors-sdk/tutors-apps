@@ -34,6 +34,7 @@ const filesToDownload = [
   'Talk.vto',
   'layouts/main.vto',
   'Note.vto',
+  'Tutorial.vto',
   'Topic.vto',
   'Wall.vto'
 ];
