@@ -16,6 +16,8 @@ export const imageTypes = [
   "JPEG",
   "GIF",
   "SVG",
+  "mov",
+  "mp4",
 ];
 
 /**

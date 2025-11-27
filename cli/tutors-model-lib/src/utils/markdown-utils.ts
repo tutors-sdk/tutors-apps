@@ -10,6 +10,7 @@ import footnote from "markdown-it-footnote";
 import deflist from "markdown-it-deflist";
 import { addCopyButton } from "shiki-transformer-copy-button";
 import type { Course, Lab, Lo, Note } from "../types/index.ts";
+import { filter, link_open, quote_close, quote_open, videoPlayer } from "./markdown-plugins.ts";
 
 const options = {
   // delay time from "copied" state back to normal state
@@ -58,39 +59,10 @@ markdownIt.use(sup);
 markdownIt.use(mark);
 markdownIt.use(footnote);
 markdownIt.use(deflist);
-
-// Custom renderer for blockquote
-markdownIt.renderer.rules.blockquote_open = () => {
-  return '<div class="custom-blockquote" style="border-left: 3px solid #ccc; padding-left: 10px; font-style: italic;">';
-};
-
-markdownIt.renderer.rules.blockquote_close = () => {
-  return "</div>";
-};
-
-const defaultRender = markdownIt.renderer.rules.link_open ||
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function (tokens: any, idx: any, options: any, env: any, self: any) {
-    return self.renderToken(tokens, idx, options);
-  };
-markdownIt.renderer.rules.link_open = function (tokens: any, idx: any, options: any, env: any, self: any) {
-  // If you are sure other plugins can't add `target` - drop check below
-  const aIndex = tokens[idx].attrIndex("target");
-  if (aIndex < 0) {
-    if (tokens[idx]?.attrs.length > 0 && tokens[idx].attrs[0][1] === "header-anchor") {
-      // do not set target in anchor tags
-    } else {
-      if (!tokens[idx].attrs[0][1].startsWith("/lab")) {
-        // as long as link it external to this lab, open in a new page
-        tokens[idx].attrPush(["target", "_blank"]); // add new attribute
-      }
-    }
-  } else {
-    tokens[idx].attrs[aIndex][1] = "_blank"; // replace value of existing attr
-  }
-  // pass token to default renderer.
-  return defaultRender(tokens, idx, options, env, self);
-};
+markdownIt.use(videoPlayer);
+markdownIt.renderer.rules.blockquote_open = quote_open;
+markdownIt.renderer.rules.blockquote_close = quote_close;
+markdownIt.renderer.rules.link_open = link_open;
 
 export function convertMdToHtml(md: string, codeTheme: string = "ayu-dark"): string {
   currentTheme = codeTheme;
@@ -138,30 +110,4 @@ export function convertLoToHtml(course: Course, lo: Lo, protocol: string = "http
   }
 }
 
-/**
- * Replaces all occurrences of a string pattern
- * @param str - Source string
- * @param find - Pattern to find
- * @param replace - Replacement string
- * @returns Updated string
- */
-function replaceAll(str: string, find: string, replace: string) {
-  return str.replace(new RegExp(find, "g"), replace);
-}
 
-/**
- * Processes markdown content to fix relative URLs
- * Handles images, archives, and internal links
- * @param src - Source markdown content
- * @param url - Base URL for converting relative paths
- * @returns Processed markdown content
- */
-export function filter(src: string, url: string, protocol: string = "https://"): string {
-  let filtered = replaceAll(src, "./img\\/", `img/`);
-  filtered = replaceAll(filtered, "img\\/", `${protocol}${url}/img/`);
-  filtered = replaceAll(filtered, "./archives\\/", `archives/`);
-  filtered = replaceAll(filtered, "(?<!/)archives\\/", `${protocol}${url}/archives/`);
-  filtered = replaceAll(filtered, "(?<!/)archive\\/(?!refs)", `${protocol}${url}/archive/`);
-  filtered = replaceAll(filtered, "\\]\\(\\#", `](${protocol}${url}#/`);
-  return filtered;
-}
