@@ -96,31 +96,3 @@ export function link_open (tokens: any, idx: any, options: any, env: any, self: 
   // pass token to default renderer.
   return self.renderToken(tokens, idx, options);
 };
-
-/**
- * Replaces all occurrences of a string pattern
- * @param str - Source string
- * @param find - Pattern to find
- * @param replace - Replacement string
- * @returns Updated string
- */
-function replaceAll(str: string, find: string, replace: string) {
-    return str.replace(new RegExp(find, "g"), replace);
-  }
-  
-  /**
-   * Processes markdown content to fix relative URLs
-   * Handles images, archives, and internal links
-   * @param src - Source markdown content
-   * @param url - Base URL for converting relative paths
-   * @returns Processed markdown content
-   */
-  export function filter(src: string, url: string, protocol: string = "https://"): string {
-    let filtered = replaceAll(src, "./img\\/", `img/`);
-    filtered = replaceAll(filtered, "img\\/", `${protocol}${url}/img/`);
-    filtered = replaceAll(filtered, "./archives\\/", `archives/`);
-    filtered = replaceAll(filtered, "(?<!/)archives\\/", `${protocol}${url}/archives/`);
-    filtered = replaceAll(filtered, "(?<!/)archive\\/(?!refs)", `${protocol}${url}/archive/`);
-    filtered = replaceAll(filtered, "\\]\\(\\#", `](${protocol}${url}#/`);
-    return filtered;
-  }
