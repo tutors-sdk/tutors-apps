@@ -1,6 +1,6 @@
 {
   "name": "@tutors/tutors-model-lib",
-  "version": "4.2.22",
+  "version": "4.2.23",
   "exports": "./src/tutors.ts",
   "license": "MIT",
   "imports": {
