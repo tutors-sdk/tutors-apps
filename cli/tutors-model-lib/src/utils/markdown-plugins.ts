@@ -5,7 +5,7 @@ const VIDEO_CLOSE = "]::";
 const ATTR_REGEX = /(\w+)=["']([^"']+)["']/g;
 const MIME_MAP: Record<string, string> = {
   mp4: "video/mp4",
-  mov: "video/quicktime",
+  mov: "video/mp4",
 };
 
 type InlineState = {
