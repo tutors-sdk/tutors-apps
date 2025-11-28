@@ -44,12 +44,19 @@ function renderVideo(attrs: Record<string, string>): string {
   const src = attrs.src ?? "";
   const type = resolveMime(src, attrs.type);
   const poster = attrs.poster ? ` poster="${attrs.poster}"` : "";
-  return `<div class="relative mx-auto w-full mb-4 border rounded-lg overflow-hidden" style="aspect-ratio: 16/9; ">
-    <video controls class="absolute inset-0 h-full w-full"${poster}>
-      <source src="${src}" type="${type}">
-      Your browser does not support the video tag.
-    </video>
-  </div>`;
+  if (src.includes("img")) {
+    return `<div class="relative mx-auto w-full mb-4 border rounded-lg overflow-hidden" style="aspect-ratio: 16/9; ">
+      <video controls class="absolute inset-0 h-full w-full"${poster}>
+        <source src="${src}" type="${type}">
+        Your browser does not support the video tag.
+      </video>
+    </div>`;
+  } else {
+    return `<div class="relative mx-auto w-full mb-4 border rounded-lg overflow-hidden" style="aspect-ratio: 16/9; ">
+      <iframe title="title" class="absolute inset-0 h-full w-full" src="https://www.youtube.com/embed/${src}" 
+        allow="encrypted-media" allowfullscreen></iframe>
+      </div>`;
+  }
 }
 
 // Custom video player plugin
