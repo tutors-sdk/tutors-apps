@@ -2,6 +2,8 @@ import type MarkdownIt from "markdown-it";
 
 const VIDEO_TOKEN = "::video[";
 const VIDEO_CLOSE = "]::";
+const PODCAST_TOKEN = "::podcast[";
+const PODCAST_CLOSE = "]::";
 const ATTR_REGEX = /(\w+)=["']([^"']+)["']/g;
 const MIME_MAP: Record<string, string> = {
   mp4: "video/mp4",
@@ -59,6 +61,25 @@ function renderVideo(attrs: Record<string, string>): string {
   }
 }
 
+function renderPodcast(attrs: Record<string, string>): string {
+  const episodeId = attrs.src ?? attrs.episode ?? "";
+  const title = attrs.title ?? "Podcast Episode";
+  if (!episodeId) {
+    return `<div class="error">Podcast player requires episodeId attribute</div>`;
+  }
+  return `<iframe
+    title="${title}"
+    data-testid="embed-iframe"
+    style="border-radius:12px"
+    src="https://open.spotify.com/embed/episode/${episodeId}?utm_source=generator?utm_source=generator"
+    width="100%"
+    height="152"
+    frameBorder="0"
+    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    loading="lazy"
+  ></iframe>`;
+}
+
 // Custom video player plugin
 export function videoPlayer(md: MarkdownIt) {
   md.inline.ruler.before("text", "custom_video", (state: InlineState, _silent: boolean) => {
@@ -79,6 +100,25 @@ export function videoPlayer(md: MarkdownIt) {
   };
 }
 
+// Custom podcast player plugin
+export function podcastPlayer(md: MarkdownIt) {
+  md.inline.ruler.before("text", "custom_podcast", (state: InlineState, _silent: boolean) => {
+    if (!state.src.startsWith(PODCAST_TOKEN, state.pos)) return false;
+    const closeIdx = state.src.indexOf(PODCAST_CLOSE, state.pos + PODCAST_TOKEN.length);
+    if (closeIdx === -1) return false;
+
+    const token = state.push("custom_podcast", "", 0);
+    token.content = state.src.slice(state.pos + PODCAST_TOKEN.length, closeIdx);
+    token.markup = "::podcast";
+    state.pos = closeIdx + PODCAST_CLOSE.length;
+    return true;
+  });
+
+  md.renderer.rules.custom_podcast = (tokens: MarkdownToken[], idx: number) => {
+    const attrs = parseAttributes(tokens[idx].content);
+    return renderPodcast(attrs);
+  };
+}
 
 export function quote_open() : string {
   return '<div class="custom-blockquote" style="border-left: 3px solid #ccc; padding-left: 10px; font-style: italic;">';

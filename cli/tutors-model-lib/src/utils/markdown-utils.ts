@@ -10,7 +10,7 @@ import footnote from "markdown-it-footnote";
 import deflist from "markdown-it-deflist";
 import { addCopyButton } from "shiki-transformer-copy-button";
 import type { Course, Lab, Lo, Note } from "../types/index.ts";
-import { link_open, quote_close, quote_open, videoPlayer } from "./markdown-plugins.ts";
+import { link_open, podcastPlayer, quote_close, quote_open, videoPlayer } from "./markdown-plugins.ts";
 
 const options = {
   // delay time from "copied" state back to normal state
@@ -60,6 +60,7 @@ markdownIt.use(mark);
 markdownIt.use(footnote);
 markdownIt.use(deflist);
 markdownIt.use(videoPlayer);
+markdownIt.use(podcastPlayer);
 markdownIt.renderer.rules.blockquote_open = quote_open;
 markdownIt.renderer.rules.blockquote_close = quote_close;
 markdownIt.renderer.rules.link_open = link_open;
