@@ -16,11 +16,12 @@ type InlineState = {
   push: (type: string, tag: string, nesting: number) => MarkdownToken;
 };
 
+// For custom rules that receive tokens from markdown-it's state.push()
 type MarkdownToken = {
   content: string;
   markup: string;
   attrIndex: (name: string) => number;
-  attrs: [string, string][];
+  attrs: [string, string][] | null;
   attrPush?: (attr: [string, string]) => void;
 };
 
@@ -82,7 +83,7 @@ function renderPodcast(attrs: Record<string, string>): string {
 
 // Custom video player plugin
 export function videoPlayer(md: MarkdownIt) {
-  md.inline.ruler.before("text", "custom_video", (state: InlineState, _silent: boolean) => {
+  md.inline.ruler.before("text", "custom_video", (state, _silent) => {
     if (!state.src.startsWith(VIDEO_TOKEN, state.pos)) return false;
     const closeIdx = state.src.indexOf(VIDEO_CLOSE, state.pos + VIDEO_TOKEN.length);
     if (closeIdx === -1) return false;
@@ -94,7 +95,7 @@ export function videoPlayer(md: MarkdownIt) {
     return true;
   });
 
-  md.renderer.rules.custom_video = (tokens: MarkdownToken[], idx: number) => {
+  md.renderer.rules.custom_video = (tokens, idx, options, env, self) => {
     const attrs = parseAttributes(tokens[idx].content);
     return renderVideo(attrs);
   };
@@ -102,7 +103,7 @@ export function videoPlayer(md: MarkdownIt) {
 
 // Custom podcast player plugin
 export function podcastPlayer(md: MarkdownIt) {
-  md.inline.ruler.before("text", "custom_podcast", (state: InlineState, _silent: boolean) => {
+  md.inline.ruler.before("text", "custom_podcast", (state, _silent) => {
     if (!state.src.startsWith(PODCAST_TOKEN, state.pos)) return false;
     const closeIdx = state.src.indexOf(PODCAST_CLOSE, state.pos + PODCAST_TOKEN.length);
     if (closeIdx === -1) return false;
@@ -114,7 +115,7 @@ export function podcastPlayer(md: MarkdownIt) {
     return true;
   });
 
-  md.renderer.rules.custom_podcast = (tokens: MarkdownToken[], idx: number) => {
+  md.renderer.rules.custom_podcast = (tokens, idx, options, env, self) => {
     const attrs = parseAttributes(tokens[idx].content);
     return renderPodcast(attrs);
   };
@@ -128,20 +129,28 @@ export function quote_close() : string {
   return "</div>";
 };
 
-export function link_open(tokens: MarkdownToken[], idx: number, options: Record<string, unknown>, _env: unknown, self: Renderer) {
+export function link_open(
+  tokens: MarkdownToken[],
+  idx: number,
+  options: Record<string, unknown>,
+  _env: unknown,
+  self: Renderer
+): string {
+  const token = tokens[idx];
+  const attrs = token?.attrs ?? [];
   // If you are sure other plugins can't add `target` - drop check below
-  const aIndex = tokens[idx].attrIndex("target");
+  const aIndex = token.attrIndex("target");
   if (aIndex < 0) {
-    if (tokens[idx]?.attrs.length > 0 && tokens[idx].attrs[0][1] === "header-anchor") {
+    if (attrs.length > 0 && attrs[0][1] === "header-anchor") {
       // do not set target in anchor tags
     } else {
-      if (!tokens[idx].attrs[0][1].startsWith("/lab")) {
+      if (attrs.length > 0 && !attrs[0][1].startsWith("/lab")) {
         // as long as link it external to this lab, open in a new page
-        tokens[idx].attrPush?.(["target", "_blank"]); // add new attribute
+        token.attrPush?.(["target", "_blank"]); // add new attribute
       }
     }
-  } else {
-    tokens[idx].attrs[aIndex][1] = "_blank"; // replace value of existing attr
+  } else if (token.attrs && aIndex < token.attrs.length) {
+    token.attrs[aIndex][1] = "_blank"; // replace value of existing attr
   }
   // pass token to default renderer.
   return self.renderToken(tokens, idx, options);

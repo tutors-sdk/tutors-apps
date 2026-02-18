@@ -63,7 +63,7 @@ markdownIt.use(videoPlayer);
 markdownIt.use(podcastPlayer);
 markdownIt.renderer.rules.blockquote_open = quote_open;
 markdownIt.renderer.rules.blockquote_close = quote_close;
-markdownIt.renderer.rules.link_open = link_open;
+markdownIt.renderer.rules.link_open = link_open as unknown as typeof markdownIt.renderer.rules.link_open;
 
 export function convertMdToHtml(md: string, codeTheme: string = "ayu-dark"): string {
   currentTheme = codeTheme;
