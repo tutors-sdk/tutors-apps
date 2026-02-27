@@ -14,6 +14,7 @@ import { getSupabase } from "./supabase.ts";
 export class CourseTime implements TutorsTimeCourse {
   id = "";
   title = "";
+  pin: string | null = null;
   data: CalendarEntry[] = [];
   loading = false;
   error: string | null = null;
@@ -58,6 +59,7 @@ export class CourseTime implements TutorsTimeCourse {
       this.learningRecordsError = learningRecordsError;
       this.calendarModel = new BaseCalendarModel(filteredData, null);
       this.labsModel = new BaseLabModel(learningRecords, learningRecordsError);
+      this.pin = await CourseTime.getCoursePin(id);
     } catch (e) {
       throw new Error("Failed to load calendar data");
     }
@@ -229,5 +231,26 @@ export class CourseTime implements TutorsTimeCourse {
     }
 
     return learningRecords;
+  }
+
+  /**
+   * Fetch tutors.json from the course's Netlify deployment and extract ignorePin.
+   * Returns empty string if fetch fails, JSON is invalid, or ignorePin is missing.
+   */
+  static async getCoursePin(courseId: string): Promise<string> {
+    const id = courseId.trim();
+    if (!id) return "";
+
+    try {
+      const url = `https://${id}.netlify.app/tutors.json`;
+      const res = await fetch(url);
+      if (!res.ok) return "";
+
+      const data = await res.json();
+      const pin = data?.properties?.ignorepin;
+      return pin;
+    } catch {
+      return "";
+    }
   }
 }

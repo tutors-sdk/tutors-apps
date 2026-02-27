@@ -18,6 +18,7 @@ export type CourseDisplayInfo = {
 export type TutorsTimeCourse = {
   id: string; // original course ID
   title: string; // display title (usually from tutors-connect-courses)
+  pin: string | null
   data: CalendarEntry[];
   loading: boolean;
   error: string | null;
