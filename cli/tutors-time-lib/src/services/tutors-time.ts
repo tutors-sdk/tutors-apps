@@ -6,26 +6,54 @@ import type {
   StudentDisplayInfo,
   CourseDisplayInfo,
   TutorsConnectCourse,
+  TutorsConnectUser,
   TutorsTimeService
 } from "../types/index.ts";
 import { BaseLabModel } from "./base-lab-model.ts";
 
 const courseMap = new Map<string, CourseTime>();
 
+function emptyConnectUser(githubId: string): TutorsConnectUser {
+  return {
+    github_id: githubId,
+    email: null,
+    full_name: null,
+    avatar_url: null,
+    online_status: null,
+    date_last_accessed: null,
+    sentiment: null
+  };
+}
+
+/** Display name for UI: trimmed full_name when present, otherwise github_id */
+function studentDisplayName(info: StudentDisplayInfo): string {
+  const n = info.full_name?.trim();
+  return n && n.length > 0 ? n : info.github_id;
+}
+
 export const TutorsTime: TutorsTimeService = {
-  /** Fetch student display name and avatar for app bar (used when on student route). */
+  /** Fetch full `tutors-connect-users` row for app bar and student views. */
   async getStudentDisplayInfo(studentId: string): Promise<StudentDisplayInfo> {
+    const id = studentId.trim();
     const supabase = getSupabase();
     const { data } = await supabase
       .from("tutors-connect-users")
-      .select("full_name, avatar_url")
-      .eq("github_id", studentId.trim())
+      .select("email, full_name, avatar_url, github_id, online_status, date_last_accessed, sentiment")
+      .eq("github_id", id)
       .maybeSingle();
-    const row = data as { full_name?: string | null; avatar_url?: string | null } | null;
-    const studentName =
-      row?.full_name && String(row.full_name).trim().length > 0 ? String(row.full_name).trim() : studentId.trim();
-    const avatarUrl = row?.avatar_url ?? null;
-    return { studentName, avatarUrl };
+    if (!data) {
+      return emptyConnectUser(id);
+    }
+    const row = data as TutorsConnectUser;
+    return {
+      github_id: row.github_id?.trim() || id,
+      email: row.email ?? null,
+      full_name: row.full_name ?? null,
+      avatar_url: row.avatar_url ?? null,
+      online_status: row.online_status ?? null,
+      date_last_accessed: row.date_last_accessed ?? null,
+      sentiment: row.sentiment ?? null
+    };
   },
 
   /** Return display title, image or icon for a course (for AppBar). */
@@ -126,7 +154,7 @@ export const TutorsTime: TutorsTimeService = {
 
     const studentCalRowWeek = calModel.week.rows.find((r) => r.studentid === studentId) ?? null;
     const studentCalRowDay = calModel.day.rows.find((r) => r.studentid === studentId) ?? null;
-    const studentName = studentCalRowWeek?.full_name ?? displayInfo.studentName;
+    const studentName = studentCalRowWeek?.full_name ?? studentDisplayName(displayInfo);
 
     const dates = calModel.dates ?? [];
     const weeks = calModel.weeks ?? [];
@@ -176,7 +204,9 @@ export const TutorsTime: TutorsTimeService = {
       courseTitle: course.title,
       studentid: studentId,
       studentName,
-      avatarUrl: displayInfo.avatarUrl,
+      avatarUrl: displayInfo.avatar_url,
+      online_status: displayInfo.online_status,
+      sentiment: displayInfo.sentiment,
       course: courseWithMedians,
       calendarByWeek: studentCalRowWeek,
       calendarByDay: studentCalRowDay,

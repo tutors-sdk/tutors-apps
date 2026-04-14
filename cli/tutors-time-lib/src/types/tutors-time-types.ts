@@ -1,11 +1,9 @@
 import type { CalendarEntry, CalendarRow, CalendarModel } from "./calendar-types.ts";
 import type { LabRow, LabModel, LearningRecord, LabMedianRow } from "./lab-types.ts";
+import type { TutorsConnectUser } from "./tutors-connect-types.ts";
 
-/** Return type of TutorsTime.getStudentDisplayInfo */
-export type StudentDisplayInfo = {
-  studentName: string;
-  avatarUrl: string | null;
-};
+/** Return type of TutorsTime.getStudentDisplayInfo — full `tutors-connect-users` row shape */
+export type StudentDisplayInfo = TutorsConnectUser;
 
 /** Return type of TutorsTime.getCourseDisplayInfo */
 export type CourseDisplayInfo = {
@@ -56,6 +54,10 @@ export type TutorsTimeStudent = {
   studentName: string;
   /** Student avatar URL from tutors-connect-users (null if not set or fetch failed) */
   avatarUrl: string | null;
+  /** From tutors-connect-users (null if missing or no row) */
+  online_status: string | null;
+  /** From tutors-connect-users (null if missing or no row) */
+  sentiment: string | null;
   /** Loaded course data – use course.calendarModel / course.labsModel for all median values */
   course: TutorsTimeCourse | null;
   /** Student's calendar row (by week view) */

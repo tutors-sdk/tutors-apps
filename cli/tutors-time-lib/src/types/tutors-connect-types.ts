@@ -13,12 +13,13 @@ export interface TutorsConnectCourse {
   } | null; // json null
 }
 
-// Supabase `tutors-connect-users` table model
+// Supabase `tutors-connect-users` table model (public.tutors-connect-users)
 export interface TutorsConnectUser {
-  github_id: string; // text, primary key
+  github_id: string;
   email: string | null;
   full_name: string | null;
   avatar_url: string | null;
   online_status: string | null;
   date_last_accessed: string | null; // timestamptz (ISO string)
+  sentiment: string | null;
 }
