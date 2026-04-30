@@ -173,7 +173,7 @@ export class CourseTime implements TutorsTimeCourse {
       .from("learning_records")
       .select("*")
       .eq("course_id", courseId)
-      .eq("type", "lab")
+//
       .order("date_last_accessed", { ascending: false });
 
     const { data, error } = await query;
