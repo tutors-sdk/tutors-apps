@@ -40,6 +40,7 @@ export const assetTypes: string[] = imageTypes.concat([
   "java",
   "py",
   "js",
+  "marp",
 ]);
 
 /**
