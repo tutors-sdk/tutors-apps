@@ -28,6 +28,7 @@ export const simpleTypes = [
   "book",
   "lab",
   "tutorial",
+  "notebook",
 ];
 
 /**
@@ -77,6 +78,7 @@ export const preOrder: Map<string, number> = new Map([
   ["paneltalk", 13],
   ["panelvideo", 14],
   ["podcast", 15],
+  ["notebook", 16],
 ]);
 
 /**

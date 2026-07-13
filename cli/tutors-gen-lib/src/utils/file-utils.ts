@@ -46,9 +46,10 @@ export function findLastMatchingString(
 ): string {
   path = path.replace(courseRoot, "");
   const segments = path.split("/");
+  const sortedTypes = [...loTypes].sort((a, b) => b.length - a.length);
   for (let i = segments.length - 1; i >= 0; i--) {
-    for (let j = 0; j < loTypes.length; j++) {
-      const loType = loTypes[j].slice(1);
+    for (let j = 0; j < sortedTypes.length; j++) {
+      const loType = sortedTypes[j].slice(1);
       if (segments[i].startsWith(loType)) {
         return loType;
       }

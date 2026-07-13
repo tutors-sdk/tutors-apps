@@ -117,6 +117,43 @@ export type Note = Lo & {
 };
 
 /**
+ * Notebook output from a code cell execution
+ */
+export type NotebookOutput = {
+  outputType: "stream" | "execute_result" | "display_data" | "error";
+  text?: string;
+  data?: Record<string, string>;
+  traceback?: string[];
+  name?: string;
+  executionCount?: number | null;
+};
+
+/**
+ * A single cell in a Jupyter notebook
+ */
+export type NotebookCell = {
+  cellType: "markdown" | "code" | "raw";
+  source: string;
+  sourceHtml?: string;
+  outputs: NotebookOutput[];
+  outputsHtml?: string;
+  executionCount: number | null;
+  metadata: Record<string, unknown>;
+  id: string;
+};
+
+/**
+ * Notebook learning object
+ * Represents a Jupyter notebook with cells
+ */
+export type Notebook = Lo & {
+  type: "notebook";
+  cells: NotebookCell[];
+  kernelLanguage: string;
+  kernelName: string;
+};
+
+/**
  * Podcast learning object
  * Represents a podcast episode
  */
