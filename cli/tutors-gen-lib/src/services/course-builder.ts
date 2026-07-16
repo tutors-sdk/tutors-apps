@@ -21,7 +21,7 @@ import {
   readVideoIds,
   removeLeadingHashes,
 } from "../utils/lr-utils.ts";
-import { type Archive, type Composite, type Course, isCompositeLo, type Lab, type Lo, Podcast, preOrder, type Talk, Tutorial } from "@tutors/tutors-model-lib";
+import { type Archive, type Composite, type Course, isCompositeLo, type Lab, type Lo, type Notebook, type NotebookCell, type NotebookOutput, Podcast, preOrder, type Talk, Tutorial } from "@tutors/tutors-model-lib";
 import { readWholeFile, readYamlFile } from "../utils/file-utils.ts";
 import type { LearningResource } from "../types/types.ts";
 
@@ -103,10 +103,67 @@ function buildLab(lo: Lo, lr: LearningResource): Lo {
   return lo;
 }
 
+function buildNotebook(lo: Lo, lr: LearningResource) {
+  const notebook = lo as Notebook;
+  const ipynbFiles = getFilesWithType(lr, "ipynb");
+  if (ipynbFiles.length === 0) return;
+
+  const ipynbContent = readWholeFile(ipynbFiles[0]);
+  const nb = JSON.parse(ipynbContent);
+
+  notebook.kernelLanguage = nb.metadata?.kernelspec?.language || nb.metadata?.language_info?.name || "python";
+  notebook.kernelName = nb.metadata?.kernelspec?.display_name || notebook.kernelLanguage;
+
+  notebook.cells = (nb.cells || []).map((cell: any, index: number): NotebookCell => {
+    const source = Array.isArray(cell.source) ? cell.source.join("") : (cell.source || "");
+    const outputs: NotebookOutput[] = (cell.outputs || []).map((output: any): NotebookOutput => {
+      const result: NotebookOutput = {
+        outputType: output.output_type as NotebookOutput["outputType"],
+      };
+      if (output.name) result.name = output.name;
+      if (output.execution_count != null) result.executionCount = output.execution_count;
+      if (output.text) {
+        result.text = Array.isArray(output.text) ? output.text.join("") : output.text;
+      }
+      if (output.traceback) {
+        result.traceback = output.traceback;
+      }
+      if (output.data) {
+        const data: Record<string, string> = {};
+        for (const [mime, content] of Object.entries(output.data)) {
+          const value = Array.isArray(content) ? (content as string[]).join("") : (content as string);
+          data[mime] = value;
+        }
+        result.data = data;
+      }
+      return result;
+    });
+
+    return {
+      cellType: cell.cell_type as NotebookCell["cellType"],
+      source,
+      outputs,
+      executionCount: cell.execution_count ?? null,
+      metadata: cell.metadata || {},
+      id: cell.id || `cell-${index}`,
+    };
+  });
+
+  notebook.img = getLabImage(lr);
+  notebook.imgFile = `img/${getLabImageFile(lr)}`;
+  if (!notebook.img) {
+    notebook.img = getImage(lr);
+    notebook.imgFile = getImageFile(lr);
+  }
+}
+
 function buildSimpleLo(lo: Lo, lr: LearningResource): Lo {
   switch (lo.type) {
     case "lab":
       buildLab(lo, lr);
+      break;
+    case "notebook":
+      buildNotebook(lo, lr);
       break;
     case "talk":
       buildTalk(lo, lr);
