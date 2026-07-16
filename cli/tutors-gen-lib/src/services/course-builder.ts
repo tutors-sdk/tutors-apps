@@ -31,8 +31,14 @@ function buildTalk(lo: Lo, lr: LearningResource) {
   const talk = lo as Talk;
   talk.pdf = getPdf(lr);
   talk.pdfFile = getPdfFile(lr);
-  if (!talk.pdf) {
+  if (!talk.pdf && lo.video) {
     talk.route = lo.video;
+  }
+  const marpFile = getFileWithType(lr, ["marp"]);
+  if (marpFile) {
+    const contents = frontMatter(readWholeFile(marpFile));
+    lo.contentMd = contents.body;
+    lo.frontMatter = { ...lo.frontMatter, ...contents.attributes };
   }
 }
 
