@@ -47,12 +47,8 @@ export function build(dir: string): LearningResource {
 }
 
 export function pruneTree(lr: LearningResource): void {
-  lr.lrs.forEach((resource, index) => {
-    if (resource.type === "unknown") {
-      lr.lrs.splice(index, 1);
-    }
-    pruneTree(resource);
-  });
+  lr.lrs = lr.lrs.filter((resource) => resource.type !== "unknown");
+  lr.lrs.forEach((resource) => pruneTree(resource));
 }
 
 export function buildTree(dir: string): LearningResource {
