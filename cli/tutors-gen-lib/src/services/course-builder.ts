@@ -21,7 +21,7 @@ import {
   readVideoIds,
   removeLeadingHashes,
 } from "../utils/lr-utils.ts";
-import { type Archive, type Composite, type Course, isCompositeLo, type Lab, type Lo, type Notebook, type NotebookCell, type NotebookOutput, Podcast, preOrder, type Talk, Tutorial } from "@tutors/tutors-model-lib";
+import { type Archive, type Composite, type Course, isCompositeLo, type Lab, type Lo, type Notebook, type NotebookCell, type NotebookOutput, Podcast, preOrder, Properties, type Talk, Tutorial } from "@tutors/tutors-model-lib";
 import { readWholeFile, readYamlFile } from "../utils/file-utils.ts";
 import type { LearningResource } from "../types/types.ts";
 
@@ -34,11 +34,11 @@ function buildTalk(lo: Lo, lr: LearningResource) {
   if (!talk.pdf && lo.video) {
     talk.route = lo.video;
   }
-  const marpFile = getFileWithType(lr, ["marp"]);
-  if (marpFile) {
-    const contents = frontMatter(readWholeFile(marpFile));
+  const marpFiles = getFilesWithType(lr, "marp");
+  if (marpFiles.length > 0) {
+    const contents = frontMatter(readWholeFile(marpFiles[0]));
     lo.contentMd = contents.body;
-    lo.frontMatter = { ...lo.frontMatter, ...contents.attributes };
+    lo.frontMatter = contents.attributes as Properties;
   }
 }
 
