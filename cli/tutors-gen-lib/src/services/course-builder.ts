@@ -38,7 +38,10 @@ function buildTalk(lo: Lo, lr: LearningResource) {
   if (marpFiles.length > 0) {
     const contents = frontMatter(readWholeFile(marpFiles[0]));
     lo.contentMd = contents.body;
-    lo.frontMatter = contents.attributes as Properties;
+    lo.frontMatter = {
+      ...(contents.attributes as Properties),
+      ...lo.frontMatter,
+    };
   }
 }
 
