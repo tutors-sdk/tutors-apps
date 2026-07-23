@@ -1,0 +1,33 @@
+name: Tests
+
+on:
+  push:
+    branches: [development]
+  pull_request:
+    branches: [development]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Run unit tests
+        working-directory: cli
+        run: deno test --no-check -A
+
+      - name: Run unit tests with coverage
+        working-directory: cli
+        run: deno test --no-check -A --coverage=coverage
+
+      - name: Generate coverage report
+        working-directory: cli
+        run: deno coverage coverage
